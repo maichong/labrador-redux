@@ -6,9 +6,8 @@
 
 let store;
 function setStore(rStore) {
-  console.log('------>redux,store===', rStore);
   store = rStore;
-};
+}
 function getStore() {
   return store;
 }

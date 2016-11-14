@@ -3,6 +3,6 @@
  * @date 2016-11-09
  * @author Li <li@maichong.it>
  */
-import connect from './component/connect';
-import {getStore, setStore} from './component/setStore';
+import connect from './src/connect';
+import {getStore, setStore} from './src/util/store';
 export {getStore, setStore, connect};
