@@ -27,8 +27,10 @@ export default function connect(mapStateToProps) {
       let preState:$DataMap = mapState(this.state);
       let state:$DataMap = mapState(getStore().getState());
       if (shallowEqual(state, preState)) {
+        console.log('a====a');
         return;
       }
+      console.log('a!===a');
       let nextProps:$DataMap;
       if (this.props && this.props.merge) {
         nextProps = this.props.merge(state);
@@ -53,7 +55,9 @@ export default function connect(mapStateToProps) {
         this.__unSubscribe = store.subscribe(this._onStateChange.bind(this));
         this._onStateChange.apply(this);
       }
-      func.call(this, ...arguments);
+      if(!!func){
+        func.apply(this, arguments);
+      }
     };
 
     return component;
