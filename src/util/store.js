@@ -4,11 +4,14 @@
  * @author Li <li@maichong.it>
  */
 
-let store;
-function setStore(rStore) {
-  store = rStore;
+let _store;
+
+function setStore(store) {
+  _store = store;
 }
+
 function getStore() {
-  return store;
+  return _store;
 }
-export {getStore, setStore};
+
+export { getStore, setStore };
