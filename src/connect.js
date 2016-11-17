@@ -24,9 +24,7 @@ export default function connect(mapStateToProps: Function) {
     let onUnload: Function = component.prototype.onUnload;
 
     function onStateChange() {
-      console.log('new state', getStore().getState());
       let mappedProps: $DataMap = mapState(getStore().getState());
-      console.log('mappedProps', mappedProps);
       if (!utils.shouldUpdate(this.props, mappedProps)) {
         return;
       }
@@ -46,9 +44,9 @@ export default function connect(mapStateToProps: Function) {
             this
           );
         }
+        this._update();
       }
       this.props = nextProps;
-      this._updateChildren(true);
     }
 
     component.prototype.onLoad = function (...args) {
