@@ -6,14 +6,14 @@
 // @flow
 import shallowEqual from './util/shallowEqual';
 import {getStore} from './util/store';
-
+import type {Component} from 'labrador';
 const defaultMapStateToProps:Function = state =>({});
 
-export default function connect(mapStateToProps) {
-  const shouldSubscribe:Boolean = Boolean(mapStateToProps);
+export default function connect(mapStateToProps:Function) {
+  const shouldSubscribe:boolean = mapStateToProps !== null || mapStateToProps !== undefined;
   const mapState:Function = mapStateToProps || defaultMapStateToProps;
 
-  return function wrapWithConnect(component) {
+  return function wrapWithConnect(component:Component) {
     let changeFunc:Function;
     if (!!component.prototype._onStateChange && typeof component.prototype._onStateChange === 'function') {
       changeFunc = component.prototype._onStateChange;
