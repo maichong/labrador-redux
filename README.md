@@ -8,9 +8,10 @@ npm install labrador-redux --save
 ```
 ### 使用方式
 ---
-* Store
+#### Store
 Store是数据存储仓库，用来存储和管理项目中所有的数据，派发Action,有数据变化时把新数据传递到页面中。每一个项目建议`只创建一个Store`,统一数据管理，数据流向清晰明朗。
-##### Store定义
+
+#### Store定义
 ```
 //app.js
 import { createStore } from 'redux';//创建store
