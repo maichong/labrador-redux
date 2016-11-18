@@ -19,12 +19,15 @@ import { setStore } from 'labrador-redux'; //代管store
 import reducer from './utils/reducer';/
 let store = createStore(reducer);
 setStore(store);
-//注：为了让store最先创建，以便页面文件中的数据处理，所以本示例把创建store写到了小程序的入口文件app.js的class类之外，如果有更好的方法请联系@email:li@maichong.it
+//注：为了让store最先创建，以便页面文件中的数据处理，
+//所以本示例把创建store写到了小程序的入口文件app.js的class类之外，
+//如果有更好的方法请联系 @email:li@maichong.it
 ```
-* Reducer
+#### Reducer
 Reducer是变更store仓库中数据的地方，当有`Action被派发`，Redux会把数据传递到Reducer中，进行最后的数据检查，改变相应的数据。
 `reducer`方法名最终会被`combineReducers`当做一个属性写入到store，属性值就是该方法的返回值。
-#####Reducer定义
+
+#### Reducer定义
 ```
 import {combineReducers} from 'redux';//组合多个reducer方法
 import {
@@ -42,10 +45,10 @@ function list(state = [], action) {
 const reducer = combineReducers({ list });
 export default reducer;
 ```
-* Action
+#### Action
 Action是数据变更处理的地方，如需要对数据进行操作、从后台获取数据等，请在Action中进行。使用者在需要改变数据并传递到其他界面的时候需要调用Action中的方法。
 
-##### Action定义
+#### Action定义
 ```
 import {getStore} from 'labrador-redux';
 import {
@@ -84,9 +87,9 @@ export function remove(id){
 }
 
 ```
-* 页面中使用
+#### 页面中使用
 定义好了`Store`、`Action`、`Reducer`之后，就可以在页面中使用了，在页面中使用`connect`方法告诉`labrador-redux`本页面需要的数据，`当该数据有变化的时候`，会调用当前页面中的`onUpdate`方法。
-##### 页面使用示例
+#### 页面使用示例
 ```
 import { Component, PropTypes } from 'labrador';
 import { connect } from 'labrador-redux';
