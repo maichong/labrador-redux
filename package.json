@@ -1,6 +1,8 @@
 {
   "name": "labrador-redux",
-  "version": "1.0.0",
+  "version": "0.1.0",
+  "description": "redux connect for labrador",
+  "keywords": ["labrador", "redux", "connect", "weixin", "wechat", "wxa", "wxapp"],
   "main": "index.js",
   "scripts": {
   },
@@ -9,10 +11,9 @@
     "name": "li",
     "url": "https://github.com/maichonglyd"
   },
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "redux": "^3.6.0"
   },
-  "devDependencies": {},
-  "description": ""
+  "devDependencies": {}
 }

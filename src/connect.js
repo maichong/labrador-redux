@@ -10,10 +10,17 @@ import * as utils from 'labrador/utils';
 import { getStore } from './util/store';
 
 const defaultMapStateToProps: Function = () => ({});
+const defaultMergeProps: Function = (stateProps, dispatchProps, parentProps) => ({
+  ...parentProps,
+  ...stateProps,
+  ...dispatchProps
+});
 
-export default function connect(mapStateToProps: Function) {
+export default function connect(mapStateToProps: Function, mapDispatchToProps: Function, mergeProps: Function) {
   const shouldSubscribe: boolean = mapStateToProps !== null && mapStateToProps !== undefined;
-  const mapState: Function = mapStateToProps || defaultMapStateToProps;
+  mapStateToProps = mapStateToProps || defaultMapStateToProps;
+  mapDispatchToProps = mapDispatchToProps || defaultMapStateToProps;
+  mergeProps = mergeProps || defaultMergeProps;
 
   return function wrapWithConnect(component: Component) {
     if (!shouldSubscribe) {
@@ -24,16 +31,13 @@ export default function connect(mapStateToProps: Function) {
     let onUnload: Function = component.prototype.onUnload;
 
     function onStateChange() {
-      let mappedProps: $DataMap = mapState(getStore().getState());
+      const store = getStore();
+      let mappedProps: $DataMap = mapStateToProps(store.getState());
       if (!utils.shouldUpdate(this.props, mappedProps)) {
         return;
       }
-      let nextProps: $DataMap;
-      if (this.props && this.props.merge && this.props.asMutable) {
-        nextProps = this.props.merge(mappedProps);
-      } else {
-        nextProps = Object.assign({}, this.props, mappedProps);
-      }
+      let dispatchProps = mapDispatchToProps(store.dispatch);
+      let nextProps: $DataMap = mergeProps(mappedProps, dispatchProps, this.props);
       if (this.onUpdate) {
         this.onUpdate(nextProps);
         if (__DEV__) {
@@ -44,9 +48,9 @@ export default function connect(mapStateToProps: Function) {
             this
           );
         }
-        this._update();
       }
       this.props = nextProps;
+      this._update();
     }
 
     component.prototype.onLoad = function (...args) {
