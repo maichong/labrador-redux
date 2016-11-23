@@ -17,7 +17,7 @@ const defaultMergeProps: Function = (stateProps, dispatchProps, parentProps) => 
 });
 
 export default function connect(mapStateToProps: Function, mapDispatchToProps: Function, mergeProps: Function) {
-  const shouldSubscribe: boolean = mapStateToProps !== null && mapStateToProps !== undefined;
+  const shouldSubscribe: boolean = !!mapStateToProps || !!mapDispatchToProps;
   mapStateToProps = mapStateToProps || defaultMapStateToProps;
   mapDispatchToProps = mapDispatchToProps || defaultMapStateToProps;
   mergeProps = mergeProps || defaultMergeProps;
@@ -29,11 +29,12 @@ export default function connect(mapStateToProps: Function, mapDispatchToProps: F
     let unSubscribe: Function;
     let onLoad: Function = component.prototype.onLoad;
     let onUnload: Function = component.prototype.onUnload;
+    let connected = false;
 
     function onStateChange() {
       const store = getStore();
       let mappedProps: $DataMap = mapStateToProps(store.getState());
-      if (!utils.shouldUpdate(this.props, mappedProps)) {
+      if (connected && !utils.shouldUpdate(this.props, mappedProps)) {
         return;
       }
       let dispatchProps = mapDispatchToProps(store.dispatch);
