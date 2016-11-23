@@ -17,13 +17,13 @@ const defaultMergeProps: Function = (stateProps, dispatchProps, parentProps) => 
 });
 
 export default function connect(mapStateToProps: Function, mapDispatchToProps: Function, mergeProps: Function) {
-  const shouldSubscribe: boolean = !!mapStateToProps || !!mapDispatchToProps;
+  const shouldSubscribe: boolean = !!mapStateToProps;
   mapStateToProps = mapStateToProps || defaultMapStateToProps;
   mapDispatchToProps = mapDispatchToProps || defaultMapStateToProps;
   mergeProps = mergeProps || defaultMergeProps;
 
   return function wrapWithConnect(component: Component) {
-    if (!shouldSubscribe) {
+    if (!shouldSubscribe && mapDispatchToProps === defaultMapStateToProps) {
       return component;
     }
     let unSubscribe: Function;
@@ -59,7 +59,10 @@ export default function connect(mapStateToProps: Function, mapDispatchToProps: F
       if (!store) {
         console.error('store对象不存在,请前往"app.js"文件中使用"redux"创建store,并传参到"labrador-redux"的setStore()方法中');
       }
-      unSubscribe = store.subscribe(onStateChange.bind(this));
+      if (shouldSubscribe) {
+        // 如果指定了 mapDispatchToProps 参数才监听store
+        unSubscribe = store.subscribe(onStateChange.bind(this));
+      }
       onStateChange.call(this);
       if (onLoad) {
         onLoad.apply(this, args);
@@ -67,7 +70,9 @@ export default function connect(mapStateToProps: Function, mapDispatchToProps: F
     };
 
     component.prototype.onUnload = function () {
-      unSubscribe();
+      if (unSubscribe) {
+        unSubscribe();
+      }
       if (onUnload) {
         onUnload.call(this);
       }

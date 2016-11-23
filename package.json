@@ -1,6 +1,6 @@
 {
   "name": "labrador-redux",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "redux connect for labrador",
   "keywords": ["labrador", "redux", "connect", "weixin", "wechat", "wxa", "wxapp"],
   "main": "index.js",
