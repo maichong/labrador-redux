@@ -9,7 +9,7 @@ npm install labrador-redux --save
 ### 要点
 ---
 应用中所有的 state 都以一个对象树的形式储存在一个单一的 *store* 中。
-惟一改变 state 的办法是触发* action*，一个描述发生什么的对象。
+惟一改变 state 的办法是触发 *action*，一个描述发生什么的对象。
 为了描述 action 如何改变 state 树，你需要编写 	*reducers*。
 
 ### Action
@@ -152,7 +152,7 @@ function list(state = [], action) {
 
 随着应用的膨胀，我们还可以将不同的 `reducer` 放到不同的文件中, 以保持其独立性并用于专门处理不同的数据域。
 
-最后，labrador-redux 提供了` combineReducers()` 方法，用于组合不同的reducer,
+最后，Redux 提供了` combineReducers()` 方法，用于组合不同的reducer,
 ```javascript
 import create from './createReducer';
 import update from './updateReducer';
@@ -239,6 +239,7 @@ list 为当前页面需要的数据，与 `reducer` 中的list方法名对应，
 ```
 ({ dataA, dataB }) => ({ dataA, dataB });
 ```
+---
 dataA 和dataB为 reducer 中对应的方法名，当数据改变时，会给`onUpdate()`方法传入一个对象：`{ dataA, dataB }`。
 #### 关于页面和组件间相互传值以及该组件所依赖的基础框架详见[labrador](https://github.com/maichong/labrador);
 ---
