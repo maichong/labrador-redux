@@ -10,6 +10,7 @@ import * as utils from 'labrador/utils';
 import { getStore } from './util/store';
 
 const defaultMapStateToProps: Function = () => ({});
+const defaultMapDispatchToProps:Function = (dispatch) => ({dispatch});
 const defaultMergeProps: Function = (stateProps, dispatchProps, parentProps) => ({
   ...parentProps,
   ...stateProps,
@@ -19,7 +20,7 @@ const defaultMergeProps: Function = (stateProps, dispatchProps, parentProps) => 
 export default function connect(mapStateToProps: Function, mapDispatchToProps: Function, mergeProps: Function) {
   const shouldSubscribe: boolean = !!mapStateToProps;
   mapStateToProps = mapStateToProps || defaultMapStateToProps;
-  mapDispatchToProps = mapDispatchToProps || defaultMapStateToProps;
+  mapDispatchToProps = mapDispatchToProps || defaultMapDispatchToProps;
   mergeProps = mergeProps || defaultMergeProps;
 
   return function wrapWithConnect(component: Component) {
