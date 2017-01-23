@@ -8,6 +8,7 @@
 import type { Component } from 'labrador';
 import * as utils from 'labrador/utils';
 import { getStore } from './util/store';
+import wrapActionCreators from './util/wrapActionCreators';
 
 const defaultMapStateToProps: Function = () => ({});
 const defaultMapDispatchToProps:Function = (dispatch) => ({dispatch});
@@ -17,10 +18,17 @@ const defaultMergeProps: Function = (stateProps, dispatchProps, parentProps) => 
   ...dispatchProps
 });
 
-export default function connect(mapStateToProps: Function, mapDispatchToProps: Function, mergeProps: Function) {
+export default function connect(mapStateToProps: Function, mapDispatchToProps: Function | Object, mergeProps: Function) {
   const shouldSubscribe: boolean = !!mapStateToProps;
   mapStateToProps = mapStateToProps || defaultMapStateToProps;
-  mapDispatchToProps = mapDispatchToProps || defaultMapDispatchToProps;
+  if (typeof mapDispatchToProps !== 'function') {
+    if (mapDispatchToProps) {
+      mapDispatchToProps = wrapActionCreators(mapDispatchToProps);
+    } else {
+      mapDispatchToProps = defaultMapStateToProps;
+    }
+  } 
+
   mergeProps = mergeProps || defaultMergeProps;
 
   return function wrapWithConnect(component: Component) {
@@ -30,6 +38,7 @@ export default function connect(mapStateToProps: Function, mapDispatchToProps: F
     let unSubscribe: Function;
     let onLoad: Function = component.prototype.onLoad;
     let onUnload: Function = component.prototype.onUnload;
+    let constructor: Function = component.prototype.constructor;
     let connected = false;
 
     function onStateChange() {
@@ -54,6 +63,19 @@ export default function connect(mapStateToProps: Function, mapDispatchToProps: F
       this.props = nextProps;
       this._update();
     }
+    
+    component.prototype.constructor = (props) => {
+      let store: $DataMap = getStore();
+      if (!store) {
+        console.error('store对象不存在,请前往"app.js"文件中使用"redux"创建store,并传参到"labrador-redux"的setStore()方法中');
+      }
+
+      let mappedProps: $DataMap = mapStateToProps(store.getState());
+      let dispatchProps = mapDispatchToProps(store.dispatch);
+      let nextProps: $DataMap = mergeProps(mappedProps, dispatchProps, props);
+
+      constructor.apply(this, nextProps);
+    };
 
     component.prototype.onLoad = function (...args) {
       let store: $DataMap = getStore();
