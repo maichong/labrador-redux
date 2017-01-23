@@ -6,6 +6,9 @@
   "main": "index.js",
   "scripts": {
   },
+  "repository": {
+    "url": "https://github.com/maichong/labrador-redux"
+  },
   "author": {
     "email": "li@maichong.it",
     "name": "li",
